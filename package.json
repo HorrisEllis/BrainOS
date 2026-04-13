@@ -1,0 +1,21 @@
+{
+  "name": "nexus-10-bridge",
+  "version": "5.0.0",
+  "description": "BrainOS v5.0 \u2014 Integrated Control Canvas. SISO-native. Intent Router. Agent Layer. Workflow Engine.",
+  "main": "bootloader.js",
+  "scripts": {
+    "start": "node nexus-bridge-server-v2.js",
+    "boot": "node bootloader.js",
+    "test": "node -e \"require('./bootloader').Bootloader && console.log('imports ok')\""
+  },
+  "dependencies": {
+    "better-sqlite3": "^9.4.3",
+    "playwright": "^1.43.0",
+    "peerjs": "^1.5.4",
+    "peer": "^9.0.1"
+  },
+  "build": {
+    "appId": "world.rheon.nexus-10-bridge",
+    "productName": "NEXUS 10 Bridge"
+  }
+}
