@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Guardian Bridge API — v3.11.0 Complete Reference</title>
+<style>
+  :root {
+    --bg:#0a0a14;--bg1:#0f0f1e;--bg2:#13131f;--panel:#161628;
+    --border:#1e1e38;--border2:#252545;
+    --text:#e0e0f0;--text2:#a0a0c0;--text3:#606080;--text4:#404060;
+    --g:#00ff88;--c:#00d4ff;--y:#ffd700;--r:#ff4466;--m:#cc44ff;--o:#ff7043;
+    --mono:'IBM Plex Mono',monospace;--display:'Rajdhani',sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:var(--mono);font-size:13px;line-height:1.7}
+  .wrap{max-width:960px;margin:0 auto;padding:40px 24px 80px}
+  h1{font-family:var(--display);font-size:28px;letter-spacing:.2em;color:var(--g);margin-bottom:4px}
+  h2{font-family:var(--display);font-size:18px;letter-spacing:.15em;color:var(--c);
+     margin:40px 0 12px;padding-top:40px;border-top:1px solid var(--border)}
+  h3{font-family:var(--display);font-size:13px;letter-spacing:.12em;color:var(--y);margin:24px 0 8px}
+  h4{font-size:11px;letter-spacing:.1em;color:var(--text2);margin:16px 0 6px}
+  p{color:var(--text2);margin-bottom:10px;font-size:12px}
+  code{background:var(--bg2);padding:1px 5px;border-radius:2px;color:var(--c);font-family:var(--mono)}
+  pre{background:var(--bg2);border:1px solid var(--border);border-radius:4px;
+      padding:16px;overflow-x:auto;margin:8px 0 16px;font-size:11px;line-height:1.6}
+  .g{color:var(--g)} .c{color:var(--c)} .y{color:var(--y)} .r{color:var(--r)}
+  .m{color:var(--m)} .t{color:var(--text3)} .o{color:var(--o)}
+  table{width:100%;border-collapse:collapse;margin:8px 0 16px;font-size:11px}
+  th{background:var(--bg2);color:var(--text2);padding:6px 10px;text-align:left;
+     border-bottom:1px solid var(--border2);letter-spacing:.08em;font-size:10px}
+  td{padding:6px 10px;border-bottom:1px solid var(--border);vertical-align:top}
+  td code{font-size:10px}
+  .tag{display:inline-block;padding:1px 6px;border-radius:2px;font-size:9px;
+       font-family:var(--display);letter-spacing:.1em;font-weight:700;margin-right:4px}
+  .tag.get{background:rgba(0,212,255,.12);color:var(--c);border:1px solid rgba(0,212,255,.3)}
+  .tag.post{background:rgba(0,255,136,.12);color:var(--g);border:1px solid rgba(0,255,136,.3)}
+  .tag.sse{background:rgba(204,68,255,.12);color:var(--m);border:1px solid rgba(204,68,255,.3)}
+  .endpoint{background:var(--panel);border:1px solid var(--border);border-left:3px solid var(--border2);
+             border-radius:3px;margin:12px 0;padding:14px 16px}
+  .endpoint.get{border-left-color:var(--c)} .endpoint.post{border-left-color:var(--g)}
+  .endpoint.sse{border-left-color:var(--m)}
+  .ep-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .ep-path{font-family:var(--mono);font-size:13px;color:var(--text);font-weight:700}
+  .ep-desc{font-size:11px;color:var(--text3);margin-left:auto}
+  .callout{background:var(--bg2);border:1px solid var(--border2);border-left:3px solid var(--g);
+            border-radius:3px;padding:12px 14px;margin:12px 0;font-size:11px}
+  .callout.warn{border-left-color:var(--y)} .callout.info{border-left-color:var(--c)}
+  .pill{display:inline-block;padding:2px 8px;border-radius:10px;font-size:9px;
+        background:rgba(0,255,136,.1);color:var(--g);border:1px solid rgba(0,255,136,.2);margin:2px}
+  .toc a{color:var(--text2);text-decoration:none;display:block;padding:2px 0;font-size:11px}
+  .toc a:hover{color:var(--c)}
+  hr{border:none;border-top:1px solid var(--border);margin:32px 0}
+  .version-badge{font-size:10px;color:var(--text3);margin-top:4px}
+  .schema-row{display:flex;gap:8px;padding:4px 0;border-bottom:1px solid var(--border);font-size:11px}
+  .schema-key{color:var(--y);min-width:160px;font-family:var(--mono)}
+  .schema-type{color:var(--m);min-width:80px}
+  .schema-note{color:var(--text2)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>⟁ GUARDIAN BRIDGE API</h1>
+<div class="version-badge">v3.11.0 · Bridge · Guardian v3.4.0 · NEXUS v0.51.0 · Complete Reference</div>
+
+<br>
+
+<div class="callout">
+  <strong style="color:var(--g)">Default URL:</strong> <code>http://127.0.0.1:3747</code> (local) · <code>http://{LAN_IP}:3747</code> (network)<br>
+  <strong style="color:var(--c)">Discovery:</strong> <code>GET /network/info</code> returns all available addresses<br>
+  <strong style="color:var(--y)">Auth:</strong> Optional token via <code>X-Guardian-Token</code> header. Not required for local.<br>
+  <strong style="color:var(--m)">CORS:</strong> All origins allowed. <code>OPTIONS</code> preflight supported.
+</div>
+
+<!-- TOC -->
+<div class="toc" style="background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:16px;margin:24px 0">
+  <div style="font:700 10px var(--display);letter-spacing:.15em;color:var(--text3);margin-bottom:8px">SECTIONS</div>
+  <a href="#network">Network · Discovery · LAN · DDNS</a>
+  <a href="#auth">Auth · Handshake · Token Lifecycle</a>
+  <a href="#pulse">Pulse · Heartbeat · Presence</a>
+  <a href="#callto">Callto · Registration · Exec</a>
+  <a href="#ai">AI Routing · Guardian · Direct API</a>
+  <a href="#bus">Bus · Events · SSE Stream</a>
+  <a href="#guardian">Guardian · Status · Agent Hooks</a>
+  <a href="#pipeline">Pipeline · Multi-Step Execution</a>
+  <a href="#shortids">Short IDs · Instance IDs · Node Identity</a>
+  <a href="#util">Utility · Health · Log · Config</a>
+  <a href="#events">SSE Event Reference</a>
+  <a href="#integration">Integration Examples</a>
+</div>
+
+<!-- ================================================================ NETWORK -->
+<h2 id="network">NETWORK · DISCOVERY · LAN · DDNS</h2>
+<p>The bridge now listens on <code>0.0.0.0</code> (all interfaces) by default. This means it accepts connections from your local network, not just localhost. Use <code>GET /network/info</code> to discover the correct URL to use from another machine.</p>
+
+<div class="callout warn">
+  <strong style="color:var(--y)">LAN ACCESS:</strong> Your bridge's LAN IP is typically <code>192.168.x.x</code> or <code>10.x.x.x</code>. Use <code>GET /network/info</code> to get it automatically. From another computer on the same network, replace <code>127.0.0.1</code> with your LAN IP.
+</div>
+
+<div class="endpoint get">
+  <div class="ep-head"><span class="tag get">GET</span><span class="ep-path">/network/info</span><span class="ep-desc">Discover all bridge addresses</span></div>
+  <p>Returns all ways to reach this bridge: local, LAN, and DDNS if configured. Call this first from any external client.</p>
+<pre><span class="t">// Response 200</span>
+{
+  ok:        <span class="g">true</span>,
+  version:   <span class="y">"3.11.0"</span>,
+  local:     <span class="y">"http://127.0.0.1:3747"</span>,     <span class="t">// always works on this machine</span>
+  lan:       <span class="y">"http://192.168.1.42:3747"</span>,   <span class="t">// use this from other LAN devices</span>
+  lanIp:     <span class="y">"192.168.1.42"</span>,
+  ddns:      <span class="y">"http://home.mydomain.com:3747"</span> <span class="t">// null if not configured</span>
+  port:      <span class="y">3747</span>,
+  shortId:   <span class="y">"a3f2b1c8"</span>,               <span class="t">// 8-char bridge fingerprint</span>
+  endpoints: [<span class="y">"/health"</span>, <span class="y">"/pulse"</span>, ...],
+  ts:        <span class="y">1234567890123</span>
+}</pre>
+</div>
+
+<h3>DDNS / Remote Configuration</h3>
+<p>To reach your bridge from the internet (or a different network), configure a DDNS hostname:</p>
+<pre><span class="t">// Configure DDNS via POST /config</span>
+<span class="g">POST</span> /config
+{ <span class="y">"noipUrl"</span>: <span class="y">"http://home.mydomain.com"</span> }
+
+<span class="t">// Then /network/info will include:</span>
+{ <span class="y">"ddns"</span>: <span class="y">"http://home.mydomain.com:3747"</span> }</pre>
+
+<p>BrainOS has a DDNS panel (NETWORK → DDNS) that lets you register a hostname via No-IP or any custom DDNS provider. Once set, BrainOS and other clients auto-discover the DDNS URL from <code>/network/info</code>.</p>
+
+<h3>Environment Variables</h3>
+<table>
+  <tr><th>VAR</th><th>DEFAULT</th><th>EFFECT</th></tr>
+  <tr><td><code>NEXUS_PORT</code></td><td><code>3747</code></td><td>Listen port</td></tr>
+  <tr><td><code>NEXUS_HOST</code></td><td><code>0.0.0.0</code></td><td>Bind address. Set to <code>127.0.0.1</code> to restrict to localhost only</td></tr>
+</table>
+
+<!-- ================================================================ AUTH -->
+<h2 id="auth">AUTH · HANDSHAKE · TOKEN LIFECYCLE</h2>
+<p>Tokens are optional for localhost connections. Required for remote/multi-node deployments. Every system connecting to the bridge should do a handshake first — it registers your presence and returns a 60s token.</p>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/guardian/handshake</span><span class="ep-desc">Register + receive token</span></div>
+<pre><span class="t">// Request</span>
+{
+  instanceId:   <span class="y">"myapp-abc123"</span>,          <span class="t">// your unique ID (format: {prefix}-{uuid})</span>
+  logicalId:    <span class="y">"myapp"</span>,                 <span class="t">// human label shown in mesh</span>
+  challenge:    <span class="y">"any-random-string"</span>,
+  capabilities: [<span class="y">"read"</span>, <span class="y">"write"</span>],      <span class="t">// optional</span>
+  version:      <span class="y">"1.0.0"</span>                  <span class="t">// optional</span>
+}
+
+<span class="t">// Response 200</span>
+{
+  ok:          <span class="g">true</span>,
+  token:       <span class="y">"eyJ..."</span>,               <span class="t">// 60s TTL — include in X-Guardian-Token header</span>
+  version:     <span class="y">"3.11.0"</span>,
+  instanceId:  <span class="y">"bridge-{uuid}"</span>,
+  nodes:       [ <span class="t">/* known mesh nodes */</span> ]
+}</pre>
+</div>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/guardian/heartbeat</span><span class="ep-desc">Refresh token TTL</span></div>
+<pre><span class="t">// Request — include X-Guardian-Token header</span>
+{ ts: Date.now() }
+
+<span class="t">// Response 200</span>
+{ ok: <span class="g">true</span>, ttl: <span class="y">60000</span> }</pre>
+</div>
+
+<h3>Token Lifecycle</h3>
+<pre><span class="t">Client                          Bridge</span>
+  <span class="t">|</span>                               <span class="t">|</span>
+  <span class="g">|-- POST /guardian/handshake ----></span>
+  <span class="c"><|-- { token, version, nodes } ---</span>   <span class="t">60s TTL</span>
+  <span class="t">|</span>                               <span class="t">|</span>
+  <span class="g">|-- POST /pulse (every 1.5s) ----></span>
+  <span class="c"><|-- { ok, version, ts } ---------</span>
+  <span class="t">|</span>                               <span class="t">|</span>
+  <span class="g">|-- Any request                  </span>
+  <span class="g">    Header: X-Guardian-Token: {token}</span>
+  <span class="t">|</span>                               <span class="t">|</span>
+  <span class="t">| [at 55s — auto renew]         |</span>
+  <span class="g">|-- POST /guardian/heartbeat ---->  new 60s TTL</span>
+  <span class="t">|</span>                               <span class="t">|</span>
+  <span class="t">| [if 401 received]             |</span>
+  <span class="g">|-- POST /guardian/handshake ---->  immediate re-register</span></pre>
+
+<!-- ================================================================ PULSE -->
+<h2 id="pulse">PULSE · HEARTBEAT · PRESENCE</h2>
+<p>Every node in the mesh sends a pulse every 1–2 seconds. The bridge emits <code>guardian-pulse</code> on the SSE bus, which BrainOS canvas uses to keep nodes alive and colored. Nodes that stop pulsing go idle at 15s and dead (red) at 30s.</p>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/pulse</span><span class="ep-desc">Heartbeat — send every 1.5s</span></div>
+<pre><span class="t">// Request</span>
+{
+  instanceId:  <span class="y">"guardian-6f5a028e-4589..."</span>,  <span class="t">// your full instanceId</span>
+  logicalId:   <span class="y">"guardian"</span>,                   <span class="t">// display name in mesh</span>
+  nexusUrl:    <span class="y">"http://127.0.0.1:3747"</span>,
+  bridgeUrl:   <span class="y">"http://127.0.0.1:3747"</span>,
+  status:      <span class="y">"online"</span>,
+  ts:          <span class="y">1234567890123</span>
+}
+
+<span class="t">// Response 200</span>
+{ ok: <span class="g">true</span>, version: <span class="y">"3.11.0"</span>, ts: <span class="y">1234567890123</span> }
+
+<span class="t">// GET /pulse — probe only (no body required)</span>
+<span class="t">// Response 200</span>
+{ ok: <span class="g">true</span>, version: <span class="y">"3.11.0"</span>, ts: <span class="y">1234567890123</span> }</pre>
+</div>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/ingest</span><span class="ep-desc">IR layer causal event ingest</span></div>
+  <p>Used by the Guardian IR layer to ingest causal events. Emits <code>guardian.ir.ingest</code> on the SSE bus. Any JSON payload accepted.</p>
+<pre><span class="t">// Request — any JSON</span>
+{ type: <span class="y">"element:callto:running"</span>, calltoId: <span class="y">"ct-abc"</span>, ts: Date.now() }
+
+<span class="t">// Response 202</span>
+{ ok: <span class="g">true</span>, ingested: <span class="g">true</span>, ts: <span class="y">1234567890123</span> }</pre>
+</div>
+
+<h3>Pulse Timing Reference</h3>
+<table>
+  <tr><th>AGE SINCE LAST PULSE</th><th>NODE STATUS</th><th>CANVAS COLOR</th></tr>
+  <tr><td>&lt; 15s</td><td><span class="g">online</span></td><td>Green ring + glow</td></tr>
+  <tr><td>15s – 30s</td><td><span class="y">idle</span></td><td>Cyan, no glow</td></tr>
+  <tr><td>&gt; 30s</td><td><span class="r">dead</span></td><td>Red pulsing ring + ✕</td></tr>
+</table>
+
+<!-- ================================================================ CALLTO -->
+<h2 id="callto">CALLTO · REGISTRATION · EXEC</h2>
+<p>A callto is a reference to an element on a web page captured by Guardian. It has a selector, URL, and action. When you call <code>POST /userscript/callto/:id/exec</code>, Guardian performs the action (click, type, submit) on the live page element.</p>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/userscript/callto</span><span class="ep-desc">Register a callto</span></div>
+<pre><span class="t">// Request</span>
+{
+  id:       <span class="y">"callto-{uuid}"</span>,
+  selector: <span class="y">"div.my-2.5.flex.min-h-14"</span>,  <span class="t">// CSS selector</span>
+  label:    <span class="y">"ChatGPT input"</span>,
+  url:      <span class="y">"https://chatgpt.com"</span>,
+  host:     <span class="y">"chatgpt.com"</span>,
+  action:   <span class="y">"type"</span>,                     <span class="t">// click | type | submit | listen</span>
+  ts:       <span class="y">1234567890123</span>
+}
+
+<span class="t">// Response 200</span>
+{ ok: <span class="g">true</span>, calltoId: <span class="y">"callto-{uuid}"</span> }</pre>
+</div>
+
+<div class="endpoint get">
+  <div class="ep-head"><span class="tag get">GET</span><span class="ep-path">/userscript/callto</span><span class="ep-desc">List all registered calltos</span></div>
+<pre><span class="t">// Response 200</span>
+{
+  calltos: [
+    { id, selector, label, url, host, action, ts },
+    ...
+  ]
+}</pre>
+</div>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/userscript/callto/:id/exec</span><span class="ep-desc">Execute callto action</span></div>
+  <p>Guardian performs the callto's action on the live page. Response arrives asynchronously via <code>GET /events</code> as <code>guardian.link.event</code>.</p>
+<pre><span class="t">// Request</span>
+{
+  event: {
+    type:   <span class="y">"exec"</span>,
+    text:   <span class="y">"Hello world"</span>,    <span class="t">// text to type (if action=type)</span>
+    source: <span class="y">"nexus"</span>
+  }
+}
+
+<span class="t">// Response 200</span>
+{ ok: <span class="g">true</span>, calltoId: <span class="y">"callto-abc123"</span> }
+
+<span class="t">// Then listen on GET /events for:</span>
+{ type: <span class="y">"guardian.link.event"</span>, text: <span class="y">"AI response text here"</span>, calltoId: <span class="y">"..."</span> }</pre>
+</div>
+
+<!-- ================================================================ AI -->
+<h2 id="ai">AI ROUTING · GUARDIAN · DIRECT API</h2>
+<p>The primary inference endpoint. Routes to Guardian (browser AI via callto — no API key), Ollama (local), or any direct API provider.</p>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/v1/messages</span><span class="ep-desc">AI routing — primary inference endpoint</span></div>
+<pre><span class="t">// === GUARDIAN PROVIDER — no API key needed ===</span>
+{
+  provider:  <span class="y">"guardian"</span>,
+  agentId:   <span class="y">"chatgpt"</span>,                <span class="t">// chatgpt | claude | deepseek | gemini | ollama | grok</span>
+  messages:  [{ role: <span class="y">"user"</span>, content: <span class="y">"Hello"</span> }],
+  intent:    <span class="y">"chat"</span>                    <span class="t">// chat | code | search</span>
+}
+<span class="t">// Response 202 — dispatched async</span>
+{
+  ok:       <span class="g">true</span>, status: <span class="y">"dispatched"</span>,
+  provider: <span class="y">"guardian"</span>, agentId: <span class="y">"chatgpt"</span>, calltoId: <span class="y">"callto-..."</span>,
+  message:  <span class="y">"Dispatched. Response arrives via GET /events → guardian.link.event"</span>
+}
+
+<span class="t">// === OLLAMA — local, free ===</span>
+{
+  provider: <span class="y">"ollama"</span>,
+  messages: [{ role: <span class="y">"user"</span>, content: <span class="y">"Hello"</span> }],
+  model:    <span class="y">"deepseek-r1:8b"</span>          <span class="t">// optional, uses default if omitted</span>
+}
+<span class="t">// Response 200</span>
+{ content: [{ type: <span class="y">"text"</span>, text: <span class="y">"..."</span> }], model: <span class="y">"deepseek-r1:8b"</span> }
+
+<span class="t">// === DIRECT API PROVIDERS ===</span>
+<span class="t">// provider options: "deepseek" | "claude" | "chatgpt" | "gemini" | "lmstudio" | "webui"</span>
+{
+  provider: <span class="y">"deepseek"</span>,
+  messages: [{ role: <span class="y">"user"</span>, content: <span class="y">"Write a function"</span> }],
+  model:    <span class="y">"deepseek-chat"</span>
+}
+
+<span class="t">// === AUTO FALLBACK CHAIN ===</span>
+<span class="t">// Guardian (if hooked) → Ollama → DeepSeek → error</span>
+{ provider: <span class="y">"auto"</span>, messages: [...] }
+
+<span class="t">// Error: no accounts, no guardian hook</span>
+<span class="t">// Response 503</span>
+{
+  error:  <span class="y">"No AI configured for provider=chatgpt."</span>,
+  hint:   <span class="y">"Options: 1. Guardian mode ... 2. Ollama ... 3. POST /config ..."</span>,
+  action: <span class="y">"open_options"</span>
+}</pre>
+</div>
+
+<!-- ================================================================ BUS -->
+<h2 id="bus">BUS · EVENTS · SSE STREAM</h2>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/bus/emit</span><span class="ep-desc">Broadcast to all SSE subscribers</span></div>
+<pre><span class="t">// Request</span>
+{
+  event:   <span class="y">"myapp:status-update"</span>,
+  payload: { status: <span class="y">"ready"</span>, version: <span class="y">"2.0.0"</span> }
+}
+<span class="t">// Response 200</span>
+{ ok: <span class="g">true</span>, emitted: <span class="y">"myapp:status-update"</span> }</pre>
+</div>
+
+<div class="endpoint sse">
+  <div class="ep-head"><span class="tag sse">SSE</span><span class="ep-path">GET /events</span><span class="ep-desc">Real-time event stream</span></div>
+  <p>Server-Sent Events. All bus events flow here. Connect with <code>EventSource</code>. Auto-reconnect on error.</p>
+<pre><span class="t">// Connect</span>
+const evs = new EventSource(<span class="y">'http://192.168.1.42:3747/events'</span>);  <span class="t">// or LAN IP</span>
+evs.onmessage = e => {
+  const d = JSON.parse(e.data);
+  <span class="t">// d.type    — event type string</span>
+  <span class="t">// d.payload — event data (or d.data, d.text depending on event)</span>
+  <span class="t">// d.ts      — unix timestamp</span>
+};
+evs.onerror = () => { evs.close(); setTimeout(reconnect, 3000); };</pre>
+</div>
+
+<!-- ================================================================ GUARDIAN -->
+<h2 id="guardian">GUARDIAN · STATUS · AGENT HOOKS</h2>
+
+<div class="endpoint get">
+  <div class="ep-head"><span class="tag get">GET</span><span class="ep-path">/guardian/status</span><span class="ep-desc">Connection state + nodes</span></div>
+<pre><span class="t">// Response 200</span>
+{ connected: <span class="g">true</span>, sessions: <span class="y">2</span>, nodes: { discovered: [...], manual: [...] } }</pre>
+</div>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/guardian/agent-hook</span><span class="ep-desc">Wire agentId → calltoId</span></div>
+  <p>Maps an AI agent to its input callto element. After this, <code>/v1/messages {provider:'guardian', agentId}</code> dispatches through that callto. Persisted to <code>bridge/data/agent-hooks.json</code>.</p>
+<pre><span class="t">// Request</span>
+{
+  agentId:  <span class="y">"chatgpt"</span>,     <span class="t">// chatgpt|claude|deepseek|gemini|ollama|grok</span>
+  calltoId: <span class="y">"callto-abc"</span>,
+  intent:   <span class="y">"chat"</span>         <span class="t">// chat|code|search</span>
+}
+<span class="t">// Response 200</span>
+{ ok: <span class="g">true</span>, agentId: <span class="y">"chatgpt"</span>, calltoId: <span class="y">"callto-abc"</span> }</pre>
+</div>
+
+<div class="endpoint get">
+  <div class="ep-head"><span class="tag get">GET</span><span class="ep-path">/guardian/agent-hooks</span><span class="ep-desc">All wired agents</span></div>
+<pre><span class="t">// Response 200</span>
+{
+  <span class="y">"chatgpt"</span>: { calltoId: <span class="y">"callto-abc"</span>, intent: <span class="y">"chat"</span>, ts: <span class="y">1234567890</span> },
+  <span class="y">"claude"</span>:  { calltoId: <span class="y">"callto-def"</span>, intent: <span class="y">"chat"</span>, ts: <span class="y">1234567890</span> }
+}</pre>
+</div>
+
+<!-- ================================================================ PIPELINE -->
+<h2 id="pipeline">PIPELINE · MULTI-STEP EXECUTION</h2>
+<p>Pipelines chain multiple AI steps. Each step's output becomes the next step's input. Guardian steps dispatch async; direct API steps run synchronously.</p>
+
+<pre><span class="t">// Pipeline is executed via sequential POST /v1/messages calls</span>
+<span class="t">// Each step:</span>
+const step = {
+  provider: <span class="y">"guardian"</span>,      <span class="t">// or ollama|deepseek|claude|chatgpt|auto</span>
+  agentId:  <span class="y">"chatgpt"</span>,       <span class="t">// required when provider=guardian</span>
+  intent:   <span class="y">"chat"</span>,
+  model:    <span class="y">"deepseek-r1:8b"</span>, <span class="t">// optional</span>
+  system:   <span class="y">"You are..."</span>,     <span class="t">// optional system prompt</span>
+  optional: <span class="g">false</span>,            <span class="t">// if true, skip on error instead of failing</span>
+  transform: <span class="y">"output.toUpperCase()"</span>  <span class="t">// optional JS expression applied to output</span>
+};
+
+<span class="t">// Execution flow:</span>
+<span class="t">// Step 1: POST /v1/messages {provider, messages:[{role:'user', content: initialInput}]}</span>
+<span class="t">// Step 2: POST /v1/messages {provider, messages:[{role:'user', content: step1Output}]}</span>
+<span class="t">// Step N: uses step N-1 output as input</span>
+
+<span class="t">// Guardian step response (202):</span>
+{ status: <span class="y">"dispatched"</span>, agentId: <span class="y">"chatgpt"</span> }
+<span class="t">// → listen on GET /events for guardian.link.event to get the actual response</span></pre>
+
+<!-- ================================================================ SHORTIDS -->
+<h2 id="shortids">SHORT IDS · INSTANCE IDS · NODE IDENTITY</h2>
+<p>Every node has a full instanceId and a derived 8-character shortId for display and sharing.</p>
+
+<h3>InstanceId Format</h3>
+<table>
+  <tr><th>SYSTEM</th><th>FORMAT</th><th>EXAMPLE</th><th>SHORTID</th></tr>
+  <tr><td>Guardian extension</td><td><code>guardian-{uuid}</code></td><td><code>guardian-6f5a028e-4589-43f3-9a61</code></td><td><code>6f5a028e</code></td></tr>
+  <tr><td>NEXUS</td><td><code>nexus-{uuid}</code></td><td><code>nexus-3000b1c2-0669-4d5a-a9b4</code></td><td><code>3000b1c</code></td></tr>
+  <tr><td>BrainOS</td><td><code>brainos-{uuid}</code></td><td><code>brainos-a1b2c3d4-0669-4d5a</code></td><td><code>a1b2c3d4</code></td></tr>
+  <tr><td>Causal Nexus</td><td><code>causal-{uuid}</code></td><td><code>causal-e9f8a7b6-0669-4d5a</code></td><td><code>e9f8a7b6</code></td></tr>
+  <tr><td>Eravors</td><td><code>eravors-{uuid}</code></td><td><code>eravors-f1e2d3c4-0669-4d5a</code></td><td><code>f1e2d3c4</code></td></tr>
+  <tr><td>Forge</td><td><code>forge-{uuid}</code></td><td><code>forge-b5c6d7e8-0669-4d5a</code></td><td><code>b5c6d7e8</code></td></tr>
+  <tr><td>Custom</td><td><code>{prefix}-{uuid}</code></td><td>Prefix = display name in mesh</td><td>first 8 UUID chars</td></tr>
+</table>
+
+<h3>Deriving a ShortId</h3>
+<pre>const instanceId = 'guardian-6f5a028e-4589-43f3-9a61-0c83ce2e9715';
+<span class="t">// Method 1: strip prefix, take first 8 chars of UUID</span>
+const shortId = instanceId.replace(<span class="y">/^[a-z]+-/</span>, '').slice(0, 8);
+<span class="t">// → "6f5a028e"</span>
+
+<span class="t">// Method 2: stable fingerprint from LAN IP + port (for bridge nodes)</span>
+const shortId = require('crypto')
+  .createHash('sha256').update(lanIp + port).digest('hex').slice(0, 8);</pre>
+
+<h3>Share to Connect</h3>
+<p>The shortId is what you share to connect a node. Right-click any node in BrainOS canvas → copy shortId → send to another system. They can then reference your node by shortId in their connection config.</p>
+
+<!-- ================================================================ UTIL -->
+<h2 id="util">UTILITY · HEALTH · LOG · CONFIG</h2>
+
+<div class="endpoint get">
+  <div class="ep-head"><span class="tag get">GET</span><span class="ep-path">/health</span><span class="ep-desc">Bridge status</span></div>
+<pre><span class="t">// Response 200</span>
+{
+  ok:      <span class="g">true</span>,
+  version: <span class="y">"3.11.0"</span>,
+  host:    <span class="y">"0.0.0.0"</span>,
+  localIp: <span class="y">"192.168.1.42"</span>,    <span class="t">// LAN IP</span>
+  port:    <span class="y">3747</span>,
+  uptime:  <span class="y">823</span>,              <span class="t">// seconds</span>
+  memory:  <span class="y">8.1</span>               <span class="t">// MB heap used</span>
+}</pre>
+</div>
+
+<div class="endpoint get">
+  <div class="ep-head"><span class="tag get">GET</span><span class="ep-path">/log</span><span class="ep-desc">Recent bridge log</span></div>
+<pre><span class="t">// Response 200</span>
+[ { ts, level, msg }, ... ]   <span class="t">// most recent last</span></pre>
+</div>
+
+<div class="endpoint post">
+  <div class="ep-head"><span class="tag post">POST</span><span class="ep-path">/config</span><span class="ep-desc">Set API keys + DDNS</span></div>
+<pre><span class="t">// Request — include any subset</span>
+{
+  chatgptKey:  <span class="y">"sk-..."</span>,
+  claudeKey:   <span class="y">"sk-ant-..."</span>,
+  deepseekKey: <span class="y">"sk-..."</span>,
+  ollamaUrl:   <span class="y">"http://localhost:11434"</span>,
+  noipUrl:     <span class="y">"http://home.mydomain.com"</span>   <span class="t">// DDNS hostname</span>
+}
+<span class="t">// Response 200</span>
+{ ok: <span class="g">true</span>, configured: [<span class="y">"chatgptKey"</span>, <span class="y">"noipUrl"</span>] }</pre>
+</div>
+
+<!-- ================================================================ EVENTS -->
+<h2 id="events">SSE EVENT REFERENCE</h2>
+<p>All events flow through <code>GET /events</code>. Each event has <code>type</code>, <code>payload</code> (or <code>data</code>), and <code>ts</code>.</p>
+
+<table>
+  <tr><th>EVENT TYPE</th><th>TRIGGER</th><th>KEY FIELDS</th></tr>
+  <tr><td><code class="g">guardian-pulse</code></td><td>Guardian extension heartbeat (1.5s)</td><td><code>instanceId, logicalId, status, ts</code></td></tr>
+  <tr><td><code class="g">guardian:init</code></td><td>Guardian first connection</td><td><code>instanceId, version</code></td></tr>
+  <tr><td><code class="g">guardian:handshake</code></td><td>Handshake complete</td><td><code>token, instanceId</code></td></tr>
+  <tr><td><code class="g">guardian.callto.captured</code></td><td>Element picked with Guardian</td><td><code>id, selector, url, host, action, ts</code></td></tr>
+  <tr><td><code class="g">guardian:ai:request</code></td><td>Message dispatched through Guardian</td><td><code>agentId, calltoId, text, requestId, ts</code></td></tr>
+  <tr><td><code class="g">guardian.link.event</code></td><td>Response captured from AI tab</td><td><code>text, listenerId, calltoId, ts</code></td></tr>
+  <tr><td><code class="g">guardian:ai:response</code></td><td>Alias for guardian.link.event</td><td><code>text, agentId, requestId</code></td></tr>
+  <tr><td><code class="g">guardian.ir.ingest</code></td><td>IR layer causal event</td><td><code>type, calltoId, ts</code></td></tr>
+  <tr><td><code class="g">guardian:agent:hook</code></td><td>Agent hook created/updated</td><td><code>agentId, calltoId, intent</code></td></tr>
+  <tr><td><code class="c">nexus:connected</code></td><td>NEXUS connects to bridge</td><td><code>instanceId, version</code></td></tr>
+  <tr><td><code class="c">nexus:notify</code></td><td>NEXUS broadcasts notification</td><td><code>msg, level</code></td></tr>
+</table>
+
+<!-- ================================================================ INTEGRATION -->
+<h2 id="integration">INTEGRATION EXAMPLES</h2>
+
+<h3>Minimum Viable Client (copy-paste ready)</h3>
+<pre><span class="t">// Works in browser, Node.js, BrainOS, Electron, Causal-Nexus adapters</span>
+const BRIDGE = <span class="y">'http://192.168.1.42:3747'</span>; <span class="t">// replace with your LAN IP from /network/info</span>
+const CLIENT_ID = <span class="y">'myapp-'</span> + crypto.randomUUID();
+
+<span class="t">// 1. Discover bridge address</span>
+async function discoverBridge() {
+  <span class="t">// Try local first, then probe common LAN ranges</span>
+  const urls = [
+    <span class="y">'http://127.0.0.1:3747'</span>,
+    <span class="y">'http://192.168.1.42:3747'</span>, <span class="t">// update this</span>
+  ];
+  for (const url of urls) {
+    try {
+      const r = await fetch(url + <span class="y">'/network/info'</span>, { signal: AbortSignal.timeout(1500) });
+      if (r.ok) { const d = await r.json(); return d; }
+    } catch (_) {}
+  }
+  return null;
+}
+
+<span class="t">// 2. Handshake</span>
+async function handshake(bridgeUrl) {
+  const r = await fetch(bridgeUrl + <span class="y">'/guardian/handshake'</span>, {
+    method: <span class="y">'POST'</span>, headers: { <span class="y">'Content-Type'</span>: <span class="y">'application/json'</span> },
+    body: JSON.stringify({ instanceId: CLIENT_ID, logicalId: <span class="y">'myapp'</span>, version: <span class="y">'1.0.0'</span> })
+  });
+  return (await r.json()).token;
+}
+
+<span class="t">// 3. Pulse loop</span>
+function startPulse(bridgeUrl, token) {
+  return setInterval(() => fetch(bridgeUrl + <span class="y">'/pulse'</span>, {
+    method: <span class="y">'POST'</span>, headers: { <span class="y">'Content-Type'</span>: <span class="y">'application/json'</span>, <span class="y">'X-Guardian-Token'</span>: token },
+    body: JSON.stringify({ instanceId: CLIENT_ID, logicalId: <span class="y">'myapp'</span>, status: <span class="y">'online'</span>, ts: Date.now() })
+  }).catch(() => {}), <span class="y">1500</span>);
+}
+
+<span class="t">// 4. Subscribe to events</span>
+function subscribeEvents(bridgeUrl, onEvent) {
+  const evs = new EventSource(bridgeUrl + <span class="y">'/events'</span>);
+  evs.onmessage = e => { try { onEvent(JSON.parse(e.data)); } catch (_) {} };
+  evs.onerror   = () => { evs.close(); setTimeout(() => subscribeEvents(bridgeUrl, onEvent), <span class="y">3000</span>); };
+  return evs;
+}
+
+<span class="t">// 5. Send via Guardian (no API key needed)</span>
+async function askGuardian(bridgeUrl, agentId, text) {
+  const r = await fetch(bridgeUrl + <span class="y">'/v1/messages'</span>, {
+    method: <span class="y">'POST'</span>, headers: { <span class="y">'Content-Type'</span>: <span class="y">'application/json'</span> },
+    body: JSON.stringify({
+      provider: <span class="y">'guardian'</span>, agentId,
+      messages: [{ role: <span class="y">'user'</span>, content: text }], intent: <span class="y">'chat'</span>
+    })
+  });
+  if (r.status === <span class="y">202</span>) return <span class="y">'dispatched'</span>; <span class="t">// response via SSE</span>
+  const d = await r.json(); return d.content?.[<span class="y">0</span>]?.text || d;
+}
+
+<span class="t">// Bootstrap</span>
+(async () => {
+  const info = await discoverBridge();
+  const bridgeUrl = info?.lan || <span class="y">'http://127.0.0.1:3747'</span>;
+  const token = await handshake(bridgeUrl);
+  startPulse(bridgeUrl, token);
+  subscribeEvents(bridgeUrl, d => {
+    if (d.type === <span class="y">'guardian.link.event'</span>) console.log(<span class="y">'AI:'</span>, d.text);
+    if (d.type === <span class="y">'guardian.callto.captured'</span>) console.log(<span class="y">'New callto:'</span>, d.selector);
+  });
+  await askGuardian(bridgeUrl, <span class="y">'chatgpt'</span>, <span class="y">'Hello from my app!'</span>);
+})();</pre>
+
+<h3>Causal-Nexus Adapter</h3>
+<pre><span class="t">// Wire bridge SSE events into a URCK kernel</span>
+import { createKernel } from <span class="y">'causal-nexus'</span>;
+const kernel = createKernel();
+const BRIDGE = <span class="y">'http://192.168.1.42:3747'</span>;
+
+const evs = new EventSource(BRIDGE + <span class="y">'/events'</span>);
+evs.onmessage = e => {
+  const d = JSON.parse(e.data);
+  <span class="t">// Map bridge events → URCK kernel ingestion</span>
+  if (d.type?.startsWith(<span class="y">'guardian'</span>)) {
+    kernel.ingest(d.type.replace(<span class="y">/\./g</span>, <span class="y">':'</span>), d.payload || d, <span class="y">'bridge'</span>);
+  }
+};
+
+<span class="t">// CQL query: find all response events in last 50 ticks</span>
+<span class="t">// FIND events WHERE type = 'guardian:link:event' LIMIT 20</span></pre>
+
+<hr>
+
+<div style="text-align:center;color:var(--text3);font-size:10px;padding:24px 0">
+  Guardian v3.4.0 · Bridge v3.11.0 · NEXUS v0.51.0<br>
+  Bridge listens on <code>0.0.0.0:3747</code> · LAN auto-detected · DDNS via POST /config<br>
+  All endpoints return JSON · CORS all origins · SSE at /events
+</div>
+
+</div>
+</body>
+</html>
